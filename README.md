@@ -1,6 +1,6 @@
-# Serverless TODO
+# Serverless TODO Application Project
 
-In this project, I implemented a simple TODO application using AWS Lambda and Serverless framework.
+This is the project four of udacity cloud developer nanodegree program and this is the capstone project to graduation. In this project, I implemented a simple TODO application using AWS Lambda and Serverless framework.
 
 # Functionality of the application
 
