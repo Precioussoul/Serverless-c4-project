@@ -5,13 +5,17 @@ import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 
 import { getAllTodos } from '../../helpers/BusinessLogic/todos'
-import { getUserId } from '../utils'
+import { parseUserId } from '../../auth/utils'
 
 // TODO: Get all TODO items for a current user
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     // Write your code here
-    const userId = getUserId(event)
+    const authorization = event.headers.Authorization
+    const split = authorization.split(' ')
+    const jwtToken = split[1]
+    const userId = parseUserId(jwtToken)
+
     const todos = await getAllTodos(userId)
 
     return {
