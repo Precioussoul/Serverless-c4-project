@@ -58,13 +58,6 @@ custom:
         version: v1.0.2
         title: Serverless todo API
         description: Serverless application for images sharing
-    models:
-      - name: CreateRequest
-        contentType: application/json
-        schema: ${file(models/create-todo-model.json)}
-      - name: UpdateRequest
-        contentType: application/json
-        schema: ${file(models/update-todo-model.json)}
 
 functions:
   Auth:
@@ -80,7 +73,6 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
-          reqValidatorName: RequestBodyValidator
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -101,12 +93,12 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
-          reqValidatorName: RequestBodyValidator
-          documentation:
-            summary: 'Create a new todo item in todos table'
-            description: 'Creating a new todo item in dynamoDb table'
-            requestModels:
-            'application/json': CreateRequest
+          request:
+            schemas:
+              application/json:
+                schema: ${file(models/create-todo-model.json)}
+                name: CreateItemModel
+                description: 'Validation model for Creating item'
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -123,12 +115,12 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
-          documentation:
-            summary: 'Update a todo item'
-            description: 'Updating specific todo item in dynamoDB todo table'
-            requestModels:
-            'application/json': 'UpdateRequest'
-          reqValidatorName: RequestBodyValidator
+          request:
+            schemas:
+              application/json:
+                schema: ${file(models/update-todo-model.json)}
+                name: UpdateRequest
+                description: 'Validation model for updating item'
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -145,8 +137,6 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
-          documentation:
-
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -163,7 +153,6 @@ functions:
           path: todos/{todoId}/attachment
           cors: true
           authorizer: Auth
-          reqValidatorName: RequestBodyValidator
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -216,15 +205,6 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
-
-    RequestBodyValidator:
-      Type: AWS::ApiGateway::RequestValidator
-      Properties:
-        Name: 'request-body-validator'
-        RestApiId:
-          Ref: ApiGatewayRestApi
-        ValidateRequestBody: true
-        ValidateRequestParameters: false
 
     # TODO: Complete the bucket properties below.
     # Do not forget to add the CorsConfiguration propoerty
