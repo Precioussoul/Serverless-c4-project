@@ -55,9 +55,9 @@ custom:
   documentation:
     api:
       info:
-        version: v1.0.2
+        version: v1.0.3
         title: Serverless todo API
-        description: Serverless application for images sharing
+        description: Serverless todo application for record keeping
 
 functions:
   Auth:
